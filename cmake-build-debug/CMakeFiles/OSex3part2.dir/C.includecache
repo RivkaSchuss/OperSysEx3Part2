@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/rivkaschuss/CLionProjects/OSex3part2/main.c
+stdio.h
+-
+sys/types.h
+-
+dirent.h
+-
+sys/wait.h
+-
+stdlib.h
+-
+string.h
+-
+zconf.h
+-
+fcntl.h
+-
+
