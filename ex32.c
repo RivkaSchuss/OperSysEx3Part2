@@ -14,7 +14,7 @@
 #define COMP_ERROR "COMPILATION_ERROR"
 #define BAD_OUTPUT_STRING "BAD_OUTPUT"
 #define SIMILAR_OUTPUT_STRING "SIMILAR_OUTPUT"
-#define MAX_FILENAME 1024
+#define MAX_FILENAME 160
 #define A_OUT "./a.out"
 #define COMP_OUT "./comp.out"
 #define TEMP_OUT_FILE "output.txt"
@@ -126,16 +126,13 @@ int runStudentFile(char* studentFile, char *inputFile) {
         int fd = open(inputFile, O_RDONLY);
         if (fd < 0) {
             error();
-            printf("failed fd");
         }
         //switches the input file to be able to be used as input
         if (dup2(fd, INPUT) < 0) {
             error();
-            printf("failed dup2 input");
         }
         if (close(fd) < 0) {
             error();
-            printf("failed close");
         }
 
         //opens the output file
@@ -143,14 +140,11 @@ int runStudentFile(char* studentFile, char *inputFile) {
         //switches the output file to be able to be used as output
         if (dup2(fd2, OUTPUT) < 0) {
             error();
-            printf("failed dup2 output");
         }
         if (fd2 < 0) {
-            printf("fd2 less than 0");
             error();
         }
         if (close(fd2) < 0) {
-            printf("closing fd2");
             error();
         }
         //runs the file using the input and the output
@@ -161,7 +155,6 @@ int runStudentFile(char* studentFile, char *inputFile) {
         sleep(5);
         check = waitpid(pid, &status, WNOHANG);
         if (check < 0) {
-            printf("parent process wait less than 0 in running");
             error();
             //if the run failed
         } else if (check == 0) {
@@ -215,11 +208,9 @@ void compareBeforeGrade(char *outputFile, int resultsFd, char* studentName) {
         // in child
         //runs the comparison
         if (execvp(COMP_OUT, args) < 0) {
-            printf("child process in comparing fail");
             error();
         }
     } else if (pid < 0) {
-        printf("pid in comparing error");
         error();
     } else {
         waitpid(pid, &status, 0);
@@ -269,9 +260,8 @@ int findCFile(char *studentDirPath, char *inputFile, char *outputFile, int resul
         memset(studentDirPath, '\0', MAX_FILENAME);
         strcpy(studentDirPath, copy);
 
-        printf("%s\n", innerDirent->d_name);
-
         if (isCFile(innerDirent->d_name)) {
+
             char buffer[MAX_FILENAME];
 
             //appends the current student name to the path
@@ -326,7 +316,6 @@ void checkStudents(char *studentDirPath, char *inputFile, char *outputFile) {
 
             sprintf(buffer, "%s/%s", studentDirPath,  dirInfo->d_name);
 
-            //printf("%s\n", buffer);
             //if there is no c file
             if (!findCFile(buffer, inputFile, outputFile, studFd, dirInfo->d_name)) {
                 gradeStudent(dirInfo->d_name, "0", NO_C_FILE_STRING, studFd);

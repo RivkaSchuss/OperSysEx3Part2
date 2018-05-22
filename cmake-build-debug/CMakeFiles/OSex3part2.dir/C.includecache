@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/rivkaschuss/CLionProjects/OSex3part2/main.c
+/Users/rivkaschuss/CLionProjects/OSex3part2/ex32.c
 stdio.h
 -
 sys/types.h
