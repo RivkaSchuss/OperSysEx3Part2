@@ -84,12 +84,10 @@ int compileStudentFile(char *studentDirPath) {
         error();
     } else if (pid == 0) {
         // in child
-        printf("in child");
         //runs the compiling command and compiles the student c file
         if (execvp(GCC, args) < 0) {
             // execvp failed
             error();
-            printf("failed gcc");
         }
 
     } else {
@@ -115,12 +113,8 @@ int runStudentFile(char *inputFile) {
     pid_t pid;
     pid = fork();
     if (pid < 0) {
-        printf("pid error in running");
         error();
     } if (pid == 0) {
-        printf("in child");
-        //builds the command to run the a.out
-
         //opens the input file
         int fd = open(inputFile, O_RDONLY);
         if (fd < 0) {
@@ -133,8 +127,6 @@ int runStudentFile(char *inputFile) {
         if (close(fd) < 0) {
             error();
         }
-        char *args[] = {A_OUT, inputFile, NULL};
-
         //opens the output file
         int fd2 = open(TEMP_OUT_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
         //switches the output file to be able to be used as output
@@ -148,7 +140,7 @@ int runStudentFile(char *inputFile) {
             error();
         }
         //runs the file using the input and the output
-        execvp(A_OUT, args);
+        execvp(A_OUT, NULL);
     } else {
         // in parent
         // wait for child
