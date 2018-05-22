@@ -107,11 +107,10 @@ int compileStudentFile(char *studentDirPath) {
 
 /**
  * runs the student file using a.out
- * @param studentFile the student file to run
  * @param inputFile the input file to use as input
  * @return returns 0 if the run failed, 1 in success
  */
-int runStudentFile(char* studentFile, char *inputFile) {
+int runStudentFile(char *inputFile) {
     int status, check;
     pid_t pid;
     pid = fork();
@@ -121,7 +120,7 @@ int runStudentFile(char* studentFile, char *inputFile) {
     } if (pid == 0) {
         printf("in child");
         //builds the command to run the a.out
-        char *args[] = {A_OUT, studentFile, NULL};
+
         //opens the input file
         int fd = open(inputFile, O_RDONLY);
         if (fd < 0) {
@@ -134,6 +133,7 @@ int runStudentFile(char* studentFile, char *inputFile) {
         if (close(fd) < 0) {
             error();
         }
+        char *args[] = {A_OUT, inputFile, NULL};
 
         //opens the output file
         int fd2 = open(TEMP_OUT_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
@@ -271,7 +271,7 @@ int findCFile(char *studentDirPath, char *inputFile, char *outputFile, int resul
 
             if (!compileStudentFile(buffer)) {
                 gradeStudent(studentName, "0", COMP_ERROR, resultsFd);
-            } else if(!runStudentFile(buffer, inputFile)) {
+            } else if(!runStudentFile(inputFile)) {
                 gradeStudent(studentName, "0", TIMEOUT_STRING, resultsFd);
             } else {
                 compareBeforeGrade(outputFile, resultsFd, studentName);
